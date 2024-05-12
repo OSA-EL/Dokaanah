@@ -39,15 +39,21 @@ namespace Dokaanah
 
             }) .AddEntityFrameworkStores<Dokkanah2Contex>();
 
-			 //builder.Services.AddIdentity<Customer, IdentityRole>(con =>
-             // {
-             //      con.Password.RequiredUniqueChars = 2;
-             // });
+            //builder.Services.AddIdentity<Customer, IdentityRole>(con =>
+            // {
+            //      con.Password.RequiredUniqueChars = 2;
+            // });
+
+            builder.Services.AddDbContext<Dokkanah2Contex>(options =>
+    options.UseSqlServer("Server=DESKTOP-M4PG2MK\\SQLEXPRESS;Database=DokkanahDataBase_2f;Encrypt=false;Trusted_Connection=True;TrustServerCertificate=True",
+        builder => builder.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)));
 
 
 
-
-			var app = builder.Build();
+            var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
