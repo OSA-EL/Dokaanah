@@ -27,14 +27,12 @@ namespace Dokaanah
             builder.Services.AddScoped<IOrdersRepo, OrdersRepo>();
             builder.Services.AddScoped<ICategoriesRepo, CategoriesRepo>();
             builder.Services.AddScoped<IProduct_CategoryRepo, Product_CategoryRepo>();
-            builder.Services.AddScoped<ICartProductRepo, CartProductRepository>();
-
             //builder.Services.AddScoped<Iproduct_customerRepo, product_customerRepo>();
 
 
             //builder.Services.AddScoped<UserManager<Customer>>();
-            //builder.Services.AddScoped<SignInManager<Customer>>();
-            //builder.Services.AddScoped<RoleManager<IdentityRole>>();
+			//builder.Services.AddScoped<SignInManager<Customer>>();
+			//builder.Services.AddScoped<RoleManager<IdentityRole>>();
             builder.Services.AddIdentity<Customer, IdentityRole>(con =>
             {
                 con.Password.RequireNonAlphanumeric=true;
