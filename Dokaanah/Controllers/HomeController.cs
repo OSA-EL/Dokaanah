@@ -50,6 +50,11 @@ namespace Dokaanah.Controllers
             return View();
         }
 
+        public IActionResult faq()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
