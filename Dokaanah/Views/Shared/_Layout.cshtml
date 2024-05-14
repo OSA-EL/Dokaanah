@@ -37,7 +37,7 @@
             <!-- Top Nav  -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
                 <div class="container">
-                    <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" asp-controller="Home" asp-action="index">
                         <img src="~/images/slider/1.png" alt="Logo" width="150" height="50">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarNav"
@@ -62,7 +62,7 @@
                                 <a class="nav-link" asp-controller="Home" asp-action="aboutUs">About</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
+                                <a class="nav-link" asp-controller="Home" asp-action="contantUs">Contact</a>
                                 </li>
                             </ul>
 
@@ -332,8 +332,8 @@
                                 </ul>
                                 <h6>Customer Service</h6>
                                 <ul class="help-support">
-                                    <li><a href="contact.html">contact</a></li>
-                                    <li><a href="faq.html">FAq</a></li>
+                                    <li><a asp-controller="Home" asp-action="contantUs">contact</a></li>
+                                    <li><a asp-controller="Home" asp-action="faq">FAq</a></li>
                                 </ul>
                             </div>
                         </div>

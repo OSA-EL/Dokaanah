@@ -42,7 +42,8 @@ namespace Dokaanah.Controllers
             }
             var categoryNames = product.Product_Categories.Select(pc => pc.C.Name).ToList();
             ViewBag.CategoryNames = categoryNames;
-
+            var productList = _productRepo.GetRandomProducts(5).Where(p => p.Id != id).ToList();
+            ViewData["OtherProducts"] = productList;
             return View(product);
         }
 
@@ -62,22 +63,6 @@ namespace Dokaanah.Controllers
 
 
 
-        //public IActionResult TestVm()
-        //{
-        //    var products = _productRepo.GetAll(); // Get all products
-        //    var productViewModels = products.Select(p => new ProductViewModel
-        //    {
-        //        PId = p.Id,
-        //        Name = p.Name,
-        //        Price = p.Price,
-        //        Description = p.Description,
-        //        ImgUrl = p.ImgUrl,
-        //        CId = p.CategoryId,
-        //        CatName = _categoryRepo.GetCategoryNameById(p.CategoryId) // Get category name
-        //    }).ToList();
-
-        //    return View(productViewModels); // Return the list of ProductViewModels to the view
-        //}
     }
     //public class ProductsController : Controller
     //{
