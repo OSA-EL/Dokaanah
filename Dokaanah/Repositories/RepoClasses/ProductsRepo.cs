@@ -54,9 +54,9 @@ namespace Dokaanah.Repositories.RepoClasses
         //    contex10 = c1ontex10;
         //}
 
-        //public IEnumerable<Product> GetAll()
+        //public ienumerable<product> getall()
         //{
-        //    return contex10.Products.Include(p => p.Order).Include(p => p.Seller).ToList();
+        //    return contex10.products.include(p => p.order).include(p => p.seller).tolist();
         //}
 
         //// For ProductViewModel

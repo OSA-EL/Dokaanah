@@ -18,17 +18,18 @@
                     @foreach (var item in Model.CartItems)
                     {
                         <tr>
+                            
                             <th scope="row">
                                 <div class="d-flex align-items-center">
-                                    <img src="@item.product.ImgUrl" class="img-fluid me-5 rounded-circle"
+                                    <img src="@item.ImgUrl" class="img-fluid me-5 rounded-circle"
                                     style="width: 80px; height: 80px;" alt="">
                                 </div>
                             </th>
                             <td>
-                                <p class="mb-0 mt-4">@item.product.Name</p>
+                                <p class="mb-0 mt-4">@item.Name</p>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">$ @item.product.Price </p>
+                                <p class="mb-0 mt-4">$ @item.Price </p>
                             </td>
                             <td>
                                 <div class="input-group quantity mt-4" style="width: 100px;">
@@ -38,7 +39,7 @@
                                             <i class="fa fa-minus"></i>
                                         </button>
                                     </div>
-                                    <input type="text" class="form-control form-control-sm text-center border-0"
+                                    <input name="Quantity" type="text" class="form-control form-control-sm text-center border-0"
                                     value="1">
                                     <div class="input-group-btn">
                                         <button class="btn btn-sm btn-plus rounded-circle bg-light border"
@@ -49,7 +50,7 @@
                                 </div>
                             </td>
                             <td>
-                                <p class="mb-0 mt-4">$@((item.product.Price * item.product.Quantity)?.ToString("C"))  </p>
+                                <p class="mb-0 mt-4">$@((item.Price * item.Quantity)?.ToString())  </p>
                             </td>
                             <td>
                                 <button class="btn btn-md   mt-4" aria-label="delete product">
@@ -62,7 +63,7 @@
             </table>
         </div>
         <div class="d-flex justify-content-between align-items-center maxWidthButtons">
-            <a href="shop.html" class="btn btn-dark text-nowrap cart-go-shopping-page" role="button">
+            <a asp-controller="Home" asp-action="Shop" class="btn btn-dark text-nowrap cart-go-shopping-page" role="button">
                 <i class="fa-regular fa-circle-left pe-1"></i>
                 Continue Shopping
             </a>
@@ -76,7 +77,7 @@
         </div>
         <hr>
         <div class="d-grid col-6 mx-auto">
-            <a href="checkout.html" class="go-check-out-btn btn btn-danger  text-nowrap">
+            <a asp-controller="CartProduct" asp-action="checkout"  class="go-check-out-btn btn btn-danger  text-nowrap">
                 Checkout
             </a>
         </div>

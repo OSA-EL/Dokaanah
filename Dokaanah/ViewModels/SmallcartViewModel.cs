@@ -4,7 +4,7 @@ namespace Dokaanah.ViewModels
 {
     public class shoppingCartViewModel
     {
-        public List<ShoppingCartitem>? CartItems { get; set; }
+        public List<Product>? CartItems { get; set; }
 
         public float? TotalPrice { get; set; }
 

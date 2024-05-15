@@ -21,22 +21,23 @@ namespace Dokaanah.Controllers
         }
 
        
-        public IActionResult AddProductToCart(int productId)
+        public IActionResult AddProductToCart(int Id )
         {
+            var dbcontext = new Dokkanah2Contex() ;
 
 
-            var prd = _productRepo.GetProductById(productId);
+                var prd = dbcontext.Products.FirstOrDefault(x => x.Id == Id);
 
             var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart") ?? new List<ShoppingCartitem>();
 
-            var existingcartitem = _cartitems.FirstOrDefault(item => item.product.Id == productId);
+            var existingcartitem = _cartitems.FirstOrDefault(item => item.product.Id == Id);
             if (existingcartitem != null)
             {
                 existingcartitem.Quantity++;
             }
             else
             {
-                _cartitems.Add(new ShoppingCartitem
+                cartitems.Add(new ShoppingCartitem
                 {
                     product = prd,
                     Quantity = 1
@@ -48,16 +49,31 @@ namespace Dokaanah.Controllers
 
         [HttpGet]
 
-        public IActionResult ViewCart()
+        public IActionResult ViewCart(int Quantity)
         {
-            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart") ?? new List<ShoppingCartitem>();
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
 
             var cartitemviewmodel = new shoppingCartViewModel
             {
-                CartItems = cartitems,
+                CartItems = cartitems.Select(e => e.product).ToList() ,
                 TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
             };
+
             return View(cartitemviewmodel);
+        }
+
+        public IActionResult Checkout()
+        {
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList(); // ?? new List<ShoppingCartitem>();
+
+            var cartitemviewmodel = new shoppingCartViewModel
+            {
+                CartItems = cartitems.Select(e => e.product).ToList(),
+                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
+            };
+            ViewBag.totalprice = cartitemviewmodel.TotalPrice;
+            return View(cartitemviewmodel);
+
         }
 
             //List<Product> products = _productRepo.GetRandomProducts(5);
