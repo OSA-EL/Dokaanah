@@ -1,55 +1,95 @@
 ﻿using Dokaanah.Models;
 using Dokaanah.Repositories.RepoClasses;
 using Dokaanah.Repositories.RepoInterfaces;
+using Dokaanah.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Core.Types;
 
 namespace Dokaanah.Controllers
 {
+
     public class CartProductController : Controller
     {
         private readonly ICartProductRepo _cartproductRepo;
         private readonly IProductsRepo _productRepo;
-
+        private  List<ShoppingCartitem> _cartitems;
         public CartProductController(ICartProductRepo cartproductRepo , IProductsRepo productsRepo)
         {
             _cartproductRepo = cartproductRepo;
             _productRepo = productsRepo;
-
+            _cartitems = new List<ShoppingCartitem>();
         }
-        [HttpPost]
-        public IActionResult AddProductToCart(int productId, int cartId)
+
+       
+        public IActionResult AddProductToCart(int productId)
         {
-            List<Product> products = _productRepo.GetRandomProducts(5);
-            try
-            {
-                // Check if the product already exists in the cart
-                var existingCartItem = _cartproductRepo.GetCartItem(productId, cartId);
-                if (existingCartItem != null)
-                {
-                    // If the product already exists, increment its quantity
-                    existingCartItem.ProductItemsNumbers++;
-                    _cartproductRepo.UpdateCartItem(existingCartItem);
-                }
-                else
-                {
-                    // If the product does not exist, create a new cart item
-                    var newCartItem = new Cart_Product
-                    {
-                        Prid = productId,
-                        Caid = cartId,
-                        ProductItemsNumbers = 1 // Set initial quantity to 1
-                    };
-                    _cartproductRepo.AddCartItem(newCartItem);
-                }
 
-                return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-            }
-            catch (Exception ex)
+
+            var prd = _productRepo.GetProductById(productId);
+
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart") ?? new List<ShoppingCartitem>();
+
+            var existingcartitem = _cartitems.FirstOrDefault(item => item.product.Id == productId);
+            if (existingcartitem != null)
             {
-                // Handle exception
-                return StatusCode(500, "An error occurred while adding the product to the cart.");
+                existingcartitem.Quantity++;
             }
+            else
+            {
+                _cartitems.Add(new ShoppingCartitem
+                {
+                    product = prd,
+                    Quantity = 1
+                });
+            }
+            HttpContext.Session.Set("Cart", cartitems);
+            return RedirectToAction("ViewCart");
         }
+
+        [HttpGet]
+
+        public IActionResult ViewCart()
+        {
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart") ?? new List<ShoppingCartitem>();
+
+            var cartitemviewmodel = new shoppingCartViewModel
+            {
+                CartItems = cartitems,
+                TotalPrice = cartitems.Sum(item => item.product.Price * item.Quantity)
+            };
+            return View(cartitemviewmodel);
+        }
+
+            //List<Product> products = _productRepo.GetRandomProducts(5);
+            //try
+            //{
+            //    // Check if the product already exists in the cart
+            //    var existingCartItem = _cartproductRepo.GetCartItem(productId, cartId);
+            //    if (existingCartItem != null)
+            //    {
+            //        // If the product already exists, increment its quantity
+            //        existingCartItem.ProductItemsNumbers++;
+            //        _cartproductRepo.UpdateCartItem(existingCartItem);
+            //    }
+            //    else
+            //    {
+            //        // If the product does not exist, create a new cart item
+            //        var newCartItem = new Cart_Product
+            //        {
+            //            Prid = productId,
+            //            Caid = cartId,
+            //            ProductItemsNumbers = 1 // Set initial quantity to 1
+            //        };
+            //        _cartproductRepo.AddCartItem(newCartItem);
+            //    }
+
+            //    return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Handle exception
+            //    return StatusCode(500, "An error occurred while adding the product to the cart.");
+            //}
 
         public IActionResult YourCart()
         {
