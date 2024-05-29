@@ -76,6 +76,28 @@ namespace Dokaanah.Controllers
 
         }
 
+        public IActionResult RemoveProduct(int Id , int Quantity)
+        {
+            var cartitems = HttpContext.Session.Get<List<ShoppingCartitem>>("Cart").ToList() ?? new List<ShoppingCartitem>();
+
+            var itemtoRemove = cartitems.FirstOrDefault(item => item.Id == Id);
+            
+            if (itemtoRemove != null)
+            {
+                if (itemtoRemove.Quantity >= 1)
+                {
+                    itemtoRemove.Quantity--;
+                }
+                else
+                {
+                    cartitems.Remove(itemtoRemove);
+                }
+            }
+
+            HttpContext.Session.Set("Cart", cartitems);
+            return RedirectToAction("ViewCart");
+        }
+
             //List<Product> products = _productRepo.GetRandomProducts(5);
             //try
             //{
@@ -107,51 +129,51 @@ namespace Dokaanah.Controllers
             //    return StatusCode(500, "An error occurred while adding the product to the cart.");
             //}
 
-        public IActionResult YourCart()
-        {
-            return View();
-        }
+        //public IActionResult YourCart()
+        //{
+        //    return View();
+        //}
 
-        [HttpPost]
-        public IActionResult RemoveProductFromCart(int productId, int cartId)
-        {
-            try
-            {
-                var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
-                if (cartItem != null)
-                {
-                    _cartproductRepo.RemoveCartItem(cartItem);
-                }
+        //[HttpPost]
+        //public IActionResult RemoveProductFromCart(int productId, int cartId)
+        //{
+        //    try
+        //    {
+        //        var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
+        //        if (cartItem != null)
+        //        {
+        //            _cartproductRepo.RemoveCartItem(cartItem);
+        //        }
 
-                return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                return StatusCode(500, "An error occurred while removing the product from the cart.");
-            }
-        }
+        //        return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exception
+        //        return StatusCode(500, "An error occurred while removing the product from the cart.");
+        //    }
+        //}
 
-        [HttpPost]
-        public IActionResult UpdateCartProductQuantity(int productId, int cartId, int quantity)
-        {
-            try
-            {
-                var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
-                if (cartItem != null)
-                {
-                    cartItem.ProductItemsNumbers = quantity;
-                    _cartproductRepo.UpdateCartItem(cartItem);
-                }
+        //[HttpPost]
+        //public IActionResult UpdateCartProductQuantity(int productId, int cartId, int quantity)
+        //{
+        //    try
+        //    {
+        //        var cartItem = _cartproductRepo.GetCartItem(productId, cartId);
+        //        if (cartItem != null)
+        //        {
+        //            cartItem.ProductItemsNumbers = quantity;
+        //            _cartproductRepo.UpdateCartItem(cartItem);
+        //        }
 
-                return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
-            }
-            catch (Exception ex)
-            {
-                // Handle exception
-                return StatusCode(500, "An error occurred while updating the cart product quantity.");
-            }
-        }
+        //        return RedirectToAction("Index", "Cart"); // Redirect to cart page or any other page
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        // Handle exception
+        //        return StatusCode(500, "An error occurred while updating the cart product quantity.");
+        //    }
+        //}
 
     }
 }
